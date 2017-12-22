@@ -8,6 +8,8 @@ from util import *
 # Artificial Intelligence Player
 # ==========================================
 
+true_empty_cells = []
+
 class AI_Player():
 
     # ------------------------------------------
@@ -22,25 +24,11 @@ class AI_Player():
 
 
     # ------------------------------------------
-    # Generate leafs of the previous movement
-    # ------------------------------------------
-
-    def next_number(self, number):
-
-        ept_cells = find_empty_cells(self.board, self.squares)
-        while(ept_cells != []):
-
-            print "\nLista de squares vazios: ", ept_cells
-            next_move = ept_cells.pop(0)
-            print "Next move: {} \n".format(next_move)
-
-            print self.peers[next_move]
-
-    # ------------------------------------------
-    # Check movement?
+    # Check movement
     # ------------------------------------------
 
     def check_solving(self):
+
         collided = find_collision(self.board) != ([], 0)
         print "COLIDIU?", collided, "FIND_COLLISION:", find_collision(self.board)
         if collided:
@@ -52,8 +40,49 @@ class AI_Player():
 
     # ------------------------------------------
     # Try to solve the Sudoku
+    # Insert 1 in the cell
     # ------------------------------------------
 
-    def solve(self):
+    def solve(self, ept_cells):
 
-        return self.next_number(1)
+        number = 1
+
+        while not bool(ept_cells):
+
+            next_move = ept_cells.pop(0)
+
+            self.board[next_move] = number
+
+            
+
+            self.next_number(number)
+
+        return 1
+
+
+    # ------------------------------------------
+    # Generate leafs of the previous movement, testing the next number
+    # ------------------------------------------
+
+    def next_number(self, number):
+     
+        true_empty_cells = ept_cells
+        keep_solving = True
+
+        #while(ept_cells != []):
+        # Traded this line to check the implicit boleaness bool(keep_solving)
+        while(keep_solving):
+
+            if ept_cells:
+                next_move = ept_cells.pop(0)
+                print "Next move: {}".format(next_move)
+                
+                self.board[next_move] = number
+                print "Board in {}: {}\n".format(next_move, self.board[next_move])
+
+                while check_solving() < 0:
+                    self.board[next_move]
+
+                #print self.peers[next_move]
+            else:
+                keep_solving = False

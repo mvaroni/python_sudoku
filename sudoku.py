@@ -12,8 +12,8 @@ from ai_player import *
 # Sudoku
 # ==========================================
 
-numbers = [1,2,3,4,5,6,7,8,9]
-
+numbers = [1,2,3,4,5,6,7,8,9
+]
 class Sudoku:
 
     # ------------------------------------------
@@ -127,11 +127,19 @@ class Sudoku:
                 raise NoMovementException(actual_board)
 
 
-        # If player is not human, then it's the IA:
+        # If player is not human, then it's the AI:
         else:
-            my_ai = AI_Player(actual_board, self.unitlist, self.peers, self.squares)
-            my_ai.solve()
+            
+            ept_cells = find_empty_cells(self.board, self.squares)
 
+            my_ai = AI_Player(actual_board, self.unitlist, self.peers, self.squares)
+            my_ai.solve(ept_cells)
+            
+            print_board(actual_board)
+
+            return 1
+
+        return -1
 
 # ==========================================
 # Main
@@ -153,7 +161,9 @@ if __name__ == "__main__":
     os.system('cls')
 
     # Print welcome
-    print "\nWelcome to IA-SUDOKU\n"
+    print "\nWelcome to AI-SUDOKU\n"
 
-    while True:
-        game.update()
+    while game.update() < 0:
+        print "THE GAME IS NOT FINISHED"
+
+    print "THE GAME IS FINISHED!!!"
